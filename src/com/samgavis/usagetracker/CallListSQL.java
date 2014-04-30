@@ -42,23 +42,7 @@ public class CallListSQL extends ListSQL<Call> {
 	 */
 	@Override
 	protected ContentValues generateValues(Call call) {
-		String timestamp = String.valueOf(call.getTimestamp().getTime());
-		String phoneNumber = call.getPhoneNumber();
-		String type = String.valueOf(call.getType());
-		String duration = String.valueOf(call.getDuration());
-		String lattitude = String.valueOf((float)call.getLatitude());
-		String longitude = String.valueOf((float)call.getLongitude());
-		
-		ContentValues values = new ContentValues();
-		
-		values.put(TIMESTAMP_ATTRIBUTE, timestamp);
-		values.put(PHONE_NUMBER_ATTRIBUTE, phoneNumber);
-		values.put(TYPE_ATTRIBUTE, type);
-		values.put(DURATION_ATTRIBUTE, duration);
-		values.put(LAT_ATTRIBUTE, lattitude);
-		values.put(LONG_ATTRIBUTE, longitude);
-		
-		return values;
+		return ListSQLUtils.generateCallContentValues(call);
 	}
 	
 	/**
@@ -74,18 +58,12 @@ public class CallListSQL extends ListSQL<Call> {
 	 */
 	@Override
 	protected Call convertCursorToItem(Cursor cursor) {
-		return new Call(
-				ListSQLUtils.getTimestampForCursor(cursor), 
-				ListSQLUtils.getPhoneNumberForCursor(cursor), 
-				ListSQLUtils.getTypeForCursor(cursor), 
-				ListSQLUtils.getDurationForCursor(cursor), 
-				ListSQLUtils.getLatForCallCursor(cursor), 
-				ListSQLUtils.getLongForCallCursor(cursor));
+		return ListSQLUtils.convertCursorToCall(cursor);
 	}
 	
 	/**
-	 * Get number of items in table.
-	 * @return Number of items in table.
+	 * Get number of call objects in table.
+	 * @return Number of call objects in table.
 	 */
 	protected int getCount() {
 		return super.getCount(CALL_TABLE_NAME);

@@ -1,3 +1,7 @@
+/**
+ * This code is thanks to Ravi Tamada. It is available at:
+ * http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
+ */
 package com.samgavis.usagetracker;
 
 import android.app.AlertDialog;
