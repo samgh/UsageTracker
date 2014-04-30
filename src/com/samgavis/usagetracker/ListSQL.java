@@ -122,11 +122,11 @@ public abstract class ListSQL<Item> extends SQLiteOpenHelper {
 	/**
 	 * Get a list of all of the items in table.
 	 * @param tableName Name of the table to query.
-	 * @return List of items in table.
+	 * @return List of items in table with oldest items first.
 	 */
 	protected List<Item> getItems(String tableName) {
 		List<Item> itemList = new ArrayList<Item>();
-		String query = "SELECT * FROM " + tableName;
+		String query = "SELECT * FROM " + tableName + " ORDER BY " + TIMESTAMP_ATTRIBUTE;
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 	    Cursor cursor = db.rawQuery(query, null);

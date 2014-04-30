@@ -1,3 +1,12 @@
+/**
+ * Author: Sam Gavis-Hughson
+ * Date: 4-10-2014
+ * 
+ * CallListSQL.java
+ * Subclass of ListSQL that implements methods for storing
+ * Call objects in the appropriate table.
+ */
+
 package com.samgavis.usagetracker;
 
 import java.sql.Timestamp;
@@ -11,14 +20,26 @@ public class CallListSQL extends ListSQL<Call> {
 	
 	private static final String TAG = "CallListSQL";
 	
+	/**
+	 * Public constructor.
+	 * @param context Current context.
+	 */
 	public CallListSQL(Context context) {
 		super(context);
 	}
 
+	/**
+	 * Adds call object to call table.
+	 * @param call Call to add to table.
+	 */
 	protected void addCall(Call call) {
 		super.addItem(call, CALL_TABLE_NAME);
 	}
 	
+	/**
+	 * Generates a ConentValues object using call to be 
+	 * inserted into database.
+	 */
 	@Override
 	protected ContentValues generateValues(Call call) {
 		String timestamp = String.valueOf(call.getTimestamp().getTime());
@@ -40,54 +61,48 @@ public class CallListSQL extends ListSQL<Call> {
 		return values;
 	}
 	
+	/**
+	 * Get a list of all of the calls from the database.
+	 * @return List of calls. Ordered oldest Calls first.
+	 */
 	protected List<Call> getCalls() {
 		return super.getItems(CALL_TABLE_NAME);
 	}
 
+	/**
+	 * Converts cursor into Call object.
+	 */
 	@Override
 	protected Call convertCursorToItem(Cursor cursor) {
 		return new Call(
-				getTimestampForCursor(cursor), 
-				getPhoneNumberForCursor(cursor), 
-				getTypeForCursor(cursor), 
-				getDurationForCursor(cursor), 
-				getLatForCursor(cursor), 
-				getLongForCursor(cursor));
+				ListSQLUtils.getTimestampForCursor(cursor), 
+				ListSQLUtils.getPhoneNumberForCursor(cursor), 
+				ListSQLUtils.getTypeForCursor(cursor), 
+				ListSQLUtils.getDurationForCursor(cursor), 
+				ListSQLUtils.getLatForCallCursor(cursor), 
+				ListSQLUtils.getLongForCallCursor(cursor));
 	}
 	
+	/**
+	 * Get number of items in table.
+	 * @return Number of items in table.
+	 */
 	protected int getCount() {
 		return super.getCount(CALL_TABLE_NAME);
 	}
 	
+	/**
+	 * Delete call with given timestamp.
+	 * @param timestamp Timestamp of the call to delete from table.
+	 */
 	protected void deleteCall(Timestamp timestamp) {
 		super.deleteItem(timestamp, CALL_TABLE_NAME);
 	}
 	
+	/**
+	 * Delete all calls from table.
+	 */
 	protected void deleteAll() {
 		super.deleteAll(CALL_TABLE_NAME);
-	}
-
-	private Timestamp getTimestampForCursor(Cursor c) {
-		return new Timestamp(Long.parseLong(c.getString(1)));
-	}
-	
-	private String getPhoneNumberForCursor(Cursor c) {
-		return c.getString(2);
-	}
-	
-	private int getTypeForCursor(Cursor c) {
-		return Integer.parseInt(c.getString(3));
-	}
-	
-	private long getDurationForCursor(Cursor c) {
-		return Long.parseLong(c.getString(4));
-	}
-	
-	private double getLatForCursor(Cursor c) {
-		return Double.parseDouble(c.getString(5));
-	}
-	
-	private double getLongForCursor(Cursor c) {
-		return Double.parseDouble(c.getString(6));
 	}
 }
