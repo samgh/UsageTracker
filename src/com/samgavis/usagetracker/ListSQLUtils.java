@@ -30,12 +30,12 @@ public class ListSQLUtils {
 		
 		ContentValues values = new ContentValues();
 		
-		values.put(ListSQL.TIMESTAMP_ATTRIBUTE, timestamp);
-		values.put(ListSQL.PHONE_NUMBER_ATTRIBUTE, phoneNumber);
-		values.put(ListSQL.TYPE_ATTRIBUTE, type);
-		values.put(ListSQL.DURATION_ATTRIBUTE, duration);
-		values.put(ListSQL.LAT_ATTRIBUTE, latitude);
-		values.put(ListSQL.LONG_ATTRIBUTE, longitude);
+		values.put(ListSQL.TIMESTAMP_KEY, timestamp);
+		values.put(ListSQL.PHONE_NUMBER_KEY, phoneNumber);
+		values.put(ListSQL.TYPE_KEY, type);
+		values.put(ListSQL.DURATION_KEY, duration);
+		values.put(ListSQL.LAT_KEY, latitude);
+		values.put(ListSQL.LONG_KEY, longitude);
 		
 		return values;
 	}
@@ -54,11 +54,11 @@ public class ListSQLUtils {
 		
 		ContentValues values = new ContentValues();
 		
-		values.put(ListSQL.TIMESTAMP_ATTRIBUTE, timestamp);
-		values.put(ListSQL.UP_DATA_ATTRIBUTE, upData);
-		values.put(ListSQL.DOWN_DATA_ATTRIBUTE, downData);
-		values.put(ListSQL.LAT_ATTRIBUTE, latitude);
-		values.put(ListSQL.LONG_ATTRIBUTE, longitude);
+		values.put(ListSQL.TIMESTAMP_KEY, timestamp);
+		values.put(ListSQL.UP_DATA_KEY, upData);
+		values.put(ListSQL.DOWN_DATA_KEY, downData);
+		values.put(ListSQL.LAT_KEY, latitude);
+		values.put(ListSQL.LONG_KEY, longitude);
 		
 		return values;
 	}

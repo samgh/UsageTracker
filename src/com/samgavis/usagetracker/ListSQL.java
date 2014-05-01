@@ -33,27 +33,27 @@ public abstract class ListSQL<Item> extends SQLiteOpenHelper {
 	protected static final String CALL_TABLE_NAME = "call_data";
 	
 	/**
-	 * Attributes that are used by all subclasses. All of these
-	 * attributes must be included in this class to properly instantiate
+	 * Keys that are used by all subclasses. All of these
+	 * keys must be included in this class to properly instantiate
 	 * databases.
 	 */
-	protected static final String TIMESTAMP_ATTRIBUTE = "timestamp";
+	protected static final String TIMESTAMP_KEY = "timestamp";
 	protected static final String ID = "id";
-	protected static final String LAT_ATTRIBUTE = "lat";
-	protected static final String LONG_ATTRIBUTE = "long";
+	protected static final String LAT_KEY = "lat";
+	protected static final String LONG_KEY = "long";
 	
 	/**
-	 * Data-specific attributes.
+	 * Data-specific keys.
 	 */
-	protected static final String UP_DATA_ATTRIBUTE = "updata";
-	protected static final String DOWN_DATA_ATTRIBUTE = "downdata";
+	protected static final String UP_DATA_KEY = "updata";
+	protected static final String DOWN_DATA_KEY = "downdata";
 	
 	/**
-	 * Call-specific attributes.
+	 * Call-specific keys.
 	 */
-	protected static final String PHONE_NUMBER_ATTRIBUTE = "number";
-	protected static final String TYPE_ATTRIBUTE = "type";
-	protected static final String DURATION_ATTRIBUTE = "duration";
+	protected static final String PHONE_NUMBER_KEY = "number";
+	protected static final String TYPE_KEY = "type";
+	protected static final String DURATION_KEY = "duration";
 
 	/**
 	 * Public constructor.
@@ -70,18 +70,18 @@ public abstract class ListSQL<Item> extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_MOBILE_DATA_TABLE = "CREATE TABLE " + MOBILE_TABLE_NAME + "("
-                + ID + " INTEGER PRIMARY KEY," + TIMESTAMP_ATTRIBUTE + " TEXT,"
-                + UP_DATA_ATTRIBUTE + " TEXT," + DOWN_DATA_ATTRIBUTE + " TEXT," 
-                + LAT_ATTRIBUTE + " TEXT," + LONG_ATTRIBUTE + " TEXT" + ")";
+                + ID + " INTEGER PRIMARY KEY," + TIMESTAMP_KEY + " TEXT,"
+                + UP_DATA_KEY + " TEXT," + DOWN_DATA_KEY + " TEXT," 
+                + LAT_KEY + " TEXT," + LONG_KEY + " TEXT" + ")";
 		String CREATE_WIFI_DATA_TABLE = "CREATE TABLE " + WIFI_TABLE_NAME + "("
-                + ID + " INTEGER PRIMARY KEY," + TIMESTAMP_ATTRIBUTE + " TEXT,"
-                + UP_DATA_ATTRIBUTE + " TEXT," + DOWN_DATA_ATTRIBUTE + " TEXT," 
-                + LAT_ATTRIBUTE + " TEXT," + LONG_ATTRIBUTE + " TEXT" + ")";
+                + ID + " INTEGER PRIMARY KEY," + TIMESTAMP_KEY + " TEXT,"
+                + UP_DATA_KEY + " TEXT," + DOWN_DATA_KEY + " TEXT," 
+                + LAT_KEY + " TEXT," + LONG_KEY + " TEXT" + ")";
 		String CREATE_CALL_DATA_TABLE = "CREATE TABLE " + CALL_TABLE_NAME + "("
-                + ID + " INTEGER PRIMARY KEY," + TIMESTAMP_ATTRIBUTE + " TEXT," 
-				+ PHONE_NUMBER_ATTRIBUTE + " TEXT," + TYPE_ATTRIBUTE + " TEXT," 
-                + DURATION_ATTRIBUTE + " TEXT," + LAT_ATTRIBUTE + " TEXT," 
-                + LONG_ATTRIBUTE + " TEXT" + ")";
+                + ID + " INTEGER PRIMARY KEY," + TIMESTAMP_KEY + " TEXT," 
+				+ PHONE_NUMBER_KEY + " TEXT," + TYPE_KEY + " TEXT," 
+                + DURATION_KEY + " TEXT," + LAT_KEY + " TEXT," 
+                + LONG_KEY + " TEXT" + ")";
         db.execSQL(CREATE_MOBILE_DATA_TABLE);
         db.execSQL(CREATE_WIFI_DATA_TABLE);
         db.execSQL(CREATE_CALL_DATA_TABLE);
@@ -126,7 +126,7 @@ public abstract class ListSQL<Item> extends SQLiteOpenHelper {
 	 */
 	protected List<Item> getItems(String tableName) {
 		List<Item> itemList = new ArrayList<Item>();
-		String query = "SELECT * FROM " + tableName + " ORDER BY " + TIMESTAMP_ATTRIBUTE;
+		String query = "SELECT * FROM " + tableName + " ORDER BY " + TIMESTAMP_KEY;
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 	    Cursor cursor = db.rawQuery(query, null);
@@ -168,7 +168,7 @@ public abstract class ListSQL<Item> extends SQLiteOpenHelper {
 	 */
 	protected void deleteItem(Timestamp timestamp, String tableName) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(tableName, TIMESTAMP_ATTRIBUTE + "=" + timestamp.getTime(), null);
+		db.delete(tableName, TIMESTAMP_KEY + "=" + timestamp.getTime(), null);
 		db.close();
 	}
 	
