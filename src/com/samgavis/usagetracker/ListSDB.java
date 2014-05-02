@@ -16,9 +16,9 @@ import com.amazonaws.services.simpledb.model.SelectResult;
 
 public abstract class ListSDB<Item> {
 
-	private static final String CALL_DOMAIN_NAME = "_call";
-	private static final String MOBILE_DOMAIN_NAME = "_mobile";
-	private static final String WIFI_DOMAIN_NAME = "_wifi";
+	protected static final String CALL_DOMAIN_NAME_SUFFIX = "_call";
+	protected static final String MOBILE_DOMAIN_NAME_SUFFIX = "_mobile";
+	protected static final String WIFI_DOMAIN_NAME_SUFFIX = "_wifi";
 	
 	// General
 	protected static final String TIMESTAMP_ATTRIBUTE = "timestamp";
@@ -35,21 +35,27 @@ public abstract class ListSDB<Item> {
 	protected static final String TYPE_ATTRIBUTE = "type";
 	protected static final String DURATION_ATTRIBUTE = "duration";
 	
-	private AmazonSimpleDBClient mSDBClient;
-	private String mDomainPrefix;
+	protected AmazonSimpleDBClient mSDBClient;
+	
+	protected String CALL_DOMAIN_NAME;
+	protected String MOBILE_DOMAIN_NAME;
+	protected String WIFI_DOMAIN_NAME;
 	
 	protected ListSDB(AmazonSimpleDBClient client, String domainPrefix) {
 		mSDBClient = client;
-		mDomainPrefix = domainPrefix;
+		
+		CALL_DOMAIN_NAME = domainPrefix + CALL_DOMAIN_NAME_SUFFIX;
+		MOBILE_DOMAIN_NAME = domainPrefix + MOBILE_DOMAIN_NAME_SUFFIX;
+		WIFI_DOMAIN_NAME = domainPrefix + WIFI_DOMAIN_NAME_SUFFIX;
 	}
 	
-	public void createDomain(String domainName) {
-		CreateDomainRequest cdr = new CreateDomainRequest(mDomainPrefix + domainName);
+	protected void createDomain(String domainName) {
+		CreateDomainRequest cdr = new CreateDomainRequest(domainName);
 		mSDBClient.createDomain(cdr);
 	}
 	
 	protected boolean addItem(Item item, String domainName) {
-		PutAttributesRequest par = getPutAttributesRequest(item, mDomainPrefix + domainName);
+		PutAttributesRequest par = getPutAttributesRequest(item);
 		return addItem(par);
 	}
 	
@@ -61,7 +67,7 @@ public abstract class ListSDB<Item> {
 		}
 	}
 	
-	protected abstract PutAttributesRequest getPutAttributesRequest(Item item, String domainName);
+	protected abstract PutAttributesRequest getPutAttributesRequest(Item item);
 	
 	private class AddItemAsync extends AsyncTask<PutAttributesRequest, Void, Boolean> {
 		@Override
@@ -79,7 +85,7 @@ public abstract class ListSDB<Item> {
 	}
 	
 	protected List<Item> getItems(String domainName) {
-		SelectRequest selectRequest = new SelectRequest("select * from `" + mDomainPrefix + domainName + 
+		SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 				"` where " + TIMESTAMP_ATTRIBUTE + " > '' order by " + TIMESTAMP_ATTRIBUTE)
 			.withConsistentRead(true);
 		return getItems(selectRequest);
@@ -89,19 +95,19 @@ public abstract class ListSDB<Item> {
 		if (earliest == null && latest == null) {
 			return getItems(domainName);
 		} else if (earliest == null) {
-			SelectRequest selectRequest = new SelectRequest("select * from `" + mDomainPrefix + domainName + 
+			SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 					"` where " + TIMESTAMP_ATTRIBUTE + " > '' and " + TIMESTAMP_ATTRIBUTE + " <= " + 
 					ListSDBUtils.padTimestamp(latest) + " order by " + TIMESTAMP_ATTRIBUTE)
 				.withConsistentRead(true);
 			return getItems(selectRequest);
 		} else if (latest == null) {
-			SelectRequest selectRequest = new SelectRequest("select * from `" + mDomainPrefix + domainName + 
+			SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 					"` where " + TIMESTAMP_ATTRIBUTE + " >= " + ListSDBUtils.padTimestamp(earliest) + 
 					" order by " + TIMESTAMP_ATTRIBUTE)
 				.withConsistentRead(true);
 			return getItems(selectRequest);
 		} else {
-			SelectRequest selectRequest = new SelectRequest("select * from `" + mDomainPrefix + domainName + 
+			SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 					"` where " + TIMESTAMP_ATTRIBUTE + " >= " + ListSDBUtils.padTimestamp(earliest) + 
 					" and " + TIMESTAMP_ATTRIBUTE + " <= " + ListSDBUtils.padTimestamp(latest) + 
 					" order by " + TIMESTAMP_ATTRIBUTE)
@@ -111,7 +117,7 @@ public abstract class ListSDB<Item> {
 	}
 	
 	protected Item getMostRecentItem(String domainName) {
-		SelectRequest selectRequest = new SelectRequest("select * from `" + mDomainPrefix + domainName + 
+		SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 				"` where " + TIMESTAMP_ATTRIBUTE + " > '' order by " + TIMESTAMP_ATTRIBUTE + " desc limit 1")
 			.withConsistentRead(true);
 		List<Item> items = getItems(selectRequest);
@@ -120,7 +126,7 @@ public abstract class ListSDB<Item> {
 	}
 	
 	protected Item getOldestItem(String domainName) {
-		SelectRequest selectRequest = new SelectRequest("select * from `" + mDomainPrefix + domainName + 
+		SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 				"` where " + TIMESTAMP_ATTRIBUTE + " > '' order by " + TIMESTAMP_ATTRIBUTE + " limit 1")
 			.withConsistentRead(true);
 		List<Item> items = getItems(selectRequest);
