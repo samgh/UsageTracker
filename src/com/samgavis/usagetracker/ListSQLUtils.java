@@ -70,12 +70,12 @@ public class ListSQLUtils {
 	 */
 	protected static Call convertCursorToCall(Cursor cursor) {
 		return new Call(
-				ListSQLUtils.getTimestampForCursor(cursor), 
-				ListSQLUtils.getPhoneNumberForCursor(cursor), 
-				ListSQLUtils.getTypeForCursor(cursor), 
-				ListSQLUtils.getDurationForCursor(cursor), 
-				ListSQLUtils.getLatForCallCursor(cursor), 
-				ListSQLUtils.getLongForCallCursor(cursor));
+				ListSQLUtils.getTimestampFromCursor(cursor), 
+				ListSQLUtils.getPhoneNumberFromCursor(cursor), 
+				ListSQLUtils.getTypeFromCursor(cursor), 
+				ListSQLUtils.getDurationFromCursor(cursor), 
+				ListSQLUtils.getLatFromCallCursor(cursor), 
+				ListSQLUtils.getLongFromCallCursor(cursor));
 	}
 	
 	/**
@@ -85,18 +85,18 @@ public class ListSQLUtils {
 	 */
 	protected static Data convertCursorToData(Cursor cursor) {
 		return new Data(
-				ListSQLUtils.getTimestampForCursor(cursor),
+				ListSQLUtils.getTimestampFromCursor(cursor),
 				null,
-				ListSQLUtils.getUpDataForCursor(cursor), 
-				ListSQLUtils.getDownDataForCursor(cursor), 
-				ListSQLUtils.getLatForDataCursor(cursor), 
-				ListSQLUtils.getLongForDataCursor(cursor));
+				ListSQLUtils.getUpDataFromCursor(cursor), 
+				ListSQLUtils.getDownDataFromCursor(cursor), 
+				ListSQLUtils.getLatFromDataCursor(cursor), 
+				ListSQLUtils.getLongFromDataCursor(cursor));
 	}
 	
 	/**
 	 * Get timestamp field from cursor.
 	 */
-	protected static Timestamp getTimestampForCursor(Cursor cursor) {
+	protected static Timestamp getTimestampFromCursor(Cursor cursor) {
 		return new Timestamp(Long.parseLong(cursor.getString(1)));
 	}
 	
@@ -107,35 +107,35 @@ public class ListSQLUtils {
 	/**
 	 * Get phone number field from cursor.
 	 */
-	protected static String getPhoneNumberForCursor(Cursor cursor) {
+	protected static String getPhoneNumberFromCursor(Cursor cursor) {
 		return cursor.getString(2);
 	}
 	
 	/**
 	 * Get call type field from cursor.
 	 */
-	protected static int getTypeForCursor(Cursor cursor) {
+	protected static int getTypeFromCursor(Cursor cursor) {
 		return Integer.parseInt(cursor.getString(3));
 	}
 	
 	/**
 	 * Get call duration field from cursor.
 	 */
-	protected static long getDurationForCursor(Cursor cursor) {
+	protected static long getDurationFromCursor(Cursor cursor) {
 		return Long.parseLong(cursor.getString(4));
 	}
 	
 	/**
 	 * Get latitude field from cursor.
 	 */
-	protected static double getLatForCallCursor(Cursor cursor) {
+	protected static double getLatFromCallCursor(Cursor cursor) {
 		return Double.parseDouble(cursor.getString(5));
 	}
 	
 	/**
 	 * Get longitude field from cursor.
 	 */
-	protected static double getLongForCallCursor(Cursor cursor) {
+	protected static double getLongFromCallCursor(Cursor cursor) {
 		return Double.parseDouble(cursor.getString(6));
 	}
 	
@@ -146,28 +146,28 @@ public class ListSQLUtils {
 	/**
 	 * Get up data field from cursor.
 	 */
-	protected static long getUpDataForCursor(Cursor cursor) {
+	protected static long getUpDataFromCursor(Cursor cursor) {
 		return Long.parseLong(cursor.getString(2));
 	}
 	
 	/**
 	 * Get down data field from cursor.
 	 */
-	protected static long getDownDataForCursor(Cursor cursor) {
+	protected static long getDownDataFromCursor(Cursor cursor) {
 		return Long.parseLong(cursor.getString(3));
 	}
 	
 	/**
 	 * Get latitude field from cursor.
 	 */
-	protected static double getLatForDataCursor(Cursor cursor) {
+	protected static double getLatFromDataCursor(Cursor cursor) {
 		return Double.parseDouble(cursor.getString(4));
 	}
 	
 	/**
 	 * Get longitude field from cursor.
 	 */
-	protected static double getLongForDataCursor(Cursor cursor) {
+	protected static double getLongFromDataCursor(Cursor cursor) {
 		return Double.parseDouble(cursor.getString(5));
 	}
 }
