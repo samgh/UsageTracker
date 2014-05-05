@@ -57,7 +57,7 @@ public class MobileDataListSDB extends ListSDB<Data> {
 	 * Get all data from SimpleDB
 	 * @return List of data. If null, then AmazonSimpleDBClient should be updated.
 	 */
-	protected List<Data> getData() {
+	public List<Data> getData() {
 		return super.getItems(MOBILE_DOMAIN_NAME);
 	}
 	
@@ -72,7 +72,7 @@ public class MobileDataListSDB extends ListSDB<Data> {
 	 * error reading from AmazonSimpleDBClient.
 	 * @see ListSDB
 	 */
-	protected List<Data> getData(Timestamp earliest, Timestamp latest) {
+	public List<Data> getData(Timestamp earliest, Timestamp latest) {
 		return super.getItems(earliest, latest, MOBILE_DOMAIN_NAME);
 	}
 	
@@ -80,7 +80,7 @@ public class MobileDataListSDB extends ListSDB<Data> {
 	 * Get most recent data.
 	 * @return Most recent data. Null if error reading from AmazonSimpleDBClient.
 	 */
-	protected Data getMostRecentData() {
+	public Data getMostRecentData() {
 		return super.getMostRecentItem(MOBILE_DOMAIN_NAME);
 	}
 	
@@ -88,7 +88,7 @@ public class MobileDataListSDB extends ListSDB<Data> {
 	 * Get oldest data.
 	 * @return Oldest data. Null if error reading from AmazonSimpleDBClient.
 	 */
-	protected Data getOldestData() {
+	public Data getOldestData() {
 		return super.getOldestItem(MOBILE_DOMAIN_NAME);
 	}
 

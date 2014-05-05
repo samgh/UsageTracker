@@ -149,7 +149,7 @@ public abstract class ListSDB<Item> {
 	 * @return List of items in database ordered from oldest to newest. Null if
 	 * error reading from AmazonSimpleDBClient.
 	 */
-	protected List<Item> getItems(String domainName) {
+	public List<Item> getItems(String domainName) {
 		SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 				"` where " + TIMESTAMP_ATTRIBUTE + " > '' order by " + TIMESTAMP_ATTRIBUTE)
 			.withConsistentRead(true);
@@ -171,7 +171,7 @@ public abstract class ListSDB<Item> {
 	 * @return List of items in range in database ordered from oldest to newest. Null if
 	 * error reading from AmazonSimpleDBClient.
 	 */
-	protected List<Item> getItems(Timestamp earliest, Timestamp latest, String domainName) {
+	public List<Item> getItems(Timestamp earliest, Timestamp latest, String domainName) {
 		if (earliest == null && latest == null) {
 			return getItems(domainName);
 		} else if (earliest == null) {
@@ -201,7 +201,7 @@ public abstract class ListSDB<Item> {
 	 * @param domainName Domain to query.
 	 * @return Most recent item in domain. Null if error reading from AmazonSimpleDBClient.
 	 */
-	protected Item getMostRecentItem(String domainName) {
+	public Item getMostRecentItem(String domainName) {
 		SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 				"` where " + TIMESTAMP_ATTRIBUTE + " > '' order by " + TIMESTAMP_ATTRIBUTE + " desc limit 1")
 			.withConsistentRead(true);
@@ -215,7 +215,7 @@ public abstract class ListSDB<Item> {
 	 * @param domainName Domain to query.
 	 * @return Oldest item in domain. Null if error reading from AmazonSimpleDBClient.
 	 */
-	protected Item getOldestItem(String domainName) {
+	public Item getOldestItem(String domainName) {
 		SelectRequest selectRequest = new SelectRequest("select * from `" + domainName + 
 				"` where " + TIMESTAMP_ATTRIBUTE + " > '' order by " + TIMESTAMP_ATTRIBUTE + " limit 1")
 			.withConsistentRead(true);
