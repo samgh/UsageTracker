@@ -57,7 +57,7 @@ public class CallListSDB extends ListSDB<Call> {
 	 * Get all calls from SimpleDB
 	 * @return List of calls. If null, then AmazonSimpleDBClient should be updated.
 	 */
-	public List<Call> getCalls() {
+	protected List<Call> getCalls() {
 		return super.getItems(CALL_DOMAIN_NAME);
 	}
 	
@@ -72,7 +72,7 @@ public class CallListSDB extends ListSDB<Call> {
 	 * error reading from AmazonSimpleDBClient.
 	 * @see ListSDB
 	 */
-	public List<Call> getCalls(Timestamp earliest, Timestamp latest) {
+	protected List<Call> getCalls(Timestamp earliest, Timestamp latest) {
 		return super.getItems(earliest, latest, CALL_DOMAIN_NAME);
 	}
 	
@@ -80,7 +80,7 @@ public class CallListSDB extends ListSDB<Call> {
 	 * Get most recent call.
 	 * @return Most recent call. Null if error reading from AmazonSimpleDBClient.
 	 */
-	public Call getMostRecentCall() {
+	protected Call getMostRecentCall() {
 		return super.getMostRecentItem(CALL_DOMAIN_NAME);
 	}
 	
@@ -88,7 +88,7 @@ public class CallListSDB extends ListSDB<Call> {
 	 * Get oldest call.
 	 * @return Oldest call. Null if error reading from AmazonSimpleDBClient.
 	 */
-	public Call getOldestCall() {
+	protected Call getOldestCall() {
 		return super.getOldestItem(CALL_DOMAIN_NAME);
 	}
 

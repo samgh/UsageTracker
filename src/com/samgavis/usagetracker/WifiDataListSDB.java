@@ -57,7 +57,7 @@ public class WifiDataListSDB extends ListSDB<Data> {
 	 * Get all data from SimpleDB
 	 * @return List of data. If null, then AmazonSimpleDBClient should be updated.
 	 */
-	public List<Data> getData() {
+	protected List<Data> getData() {
 		return super.getItems(WIFI_DOMAIN_NAME);
 	}
 	
@@ -72,7 +72,7 @@ public class WifiDataListSDB extends ListSDB<Data> {
 	 * error reading from AmazonSimpleDBClient.
 	 * @see ListSDB
 	 */
-	public List<Data> getData(Timestamp earliest, Timestamp latest) {
+	protected List<Data> getData(Timestamp earliest, Timestamp latest) {
 		return super.getItems(earliest, latest, WIFI_DOMAIN_NAME);
 	}
 	
@@ -80,7 +80,7 @@ public class WifiDataListSDB extends ListSDB<Data> {
 	 * Get most recent data.
 	 * @return Most recent data. Null if error reading from AmazonSimpleDBClient.
 	 */
-	public Data getMostRecentData() {
+	protected Data getMostRecentData() {
 		return super.getMostRecentItem(WIFI_DOMAIN_NAME);
 	}
 	
@@ -88,7 +88,7 @@ public class WifiDataListSDB extends ListSDB<Data> {
 	 * Get oldest data.
 	 * @return Oldest data. Null if error reading from AmazonSimpleDBClient.
 	 */
-	public Data getOldestData() {
+	protected Data getOldestData() {
 		return super.getOldestItem(WIFI_DOMAIN_NAME);
 	}
 

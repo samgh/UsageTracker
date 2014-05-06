@@ -3,7 +3,7 @@
  * Date: 4-10-2014
  * 
  * PushService.java
- * An IntentService that executes pushes cached data to SDB instance
+ * An IntentService that executes pushes cached data to SDB instance.
  */
 
 package com.samgavis.usagetracker;
@@ -25,7 +25,7 @@ public abstract class PushService extends IntentService {
 	
 	private static final int REQUEST_CODE = 1;
 	
-	protected String domainPrefix = "user";
+	protected String mDomainPrefix = "user";
 	
 	public PushService() {
 		super(TAG);
@@ -45,70 +45,13 @@ public abstract class PushService extends IntentService {
 			return;
 		}
 		
-		AmazonSimpleDBClient client = getSimpleDBClient(domainPrefix);
+		AmazonSimpleDBClient client = getSimpleDBClient(mDomainPrefix);
 
-		if (!(pushCalls(client) && pushMobileData(client) && pushWifiData(client))) {
+		if (!PushData.pushData(client, mDomainPrefix, this)) {
 			pushError();
 		}
 	}
-	
-	/**
-	 * Upload calls in SQLite table.
-	 * @param client AmazonSimpleDBClient of DB to which to upload.
-	 * @return True if successful, false if unsuccessful.
-	 */
-	private boolean pushCalls(AmazonSimpleDBClient client) {
-		CallListSQL mCallListSQL = new CallListSQL(this);
-		CallListSDB mCallListSDB = new CallListSDB(client, domainPrefix);
 		
-		List<Call> calls = mCallListSQL.getCalls();
-		for (Call c : calls) {
-			if (!mCallListSDB.addCall(c)) {
-				return false;
-			}
-			mCallListSQL.deleteCall(c.getTimestamp());
-		}
-		return true;
-	}
-	
-	/**
-	 * Upload mobile data in SQLite table.
-	 * @param client AmazonSimpleDBClient of DB to which to upload.
-	 * @return True if successful, false if unsuccessful.
-	 */
-	private boolean pushMobileData(AmazonSimpleDBClient client) {
-		MobileDataListSQL mDataListSQL = new MobileDataListSQL(this);
-		MobileDataListSDB mDataListSDB = new MobileDataListSDB(client, domainPrefix);
-		
-		List<Data> data = mDataListSQL.getData();
-		for (Data d : data) {
-			if (!mDataListSDB.addData(d)) {
-				return false;
-			}
-			mDataListSQL.deleteData(d.getTimestamp());
-		}
-		return true;
-	}
-	
-	/**
-	 * Upload wifi data in SQLite table.
-	 * @param client AmazonSimpleDBClient of DB to which to upload.
-	 * @return True if successful, false if unsuccessful.
-	 */
-	private boolean pushWifiData(AmazonSimpleDBClient client) {
-		WifiDataListSQL mDataListSQL = new WifiDataListSQL(this);
-		WifiDataListSDB mDataListSDB = new WifiDataListSDB(client, domainPrefix);
-		
-		List<Data> data = mDataListSQL.getData();
-		for (Data d : data) {
-			if (!mDataListSDB.addData(d)) {
-				return false;
-			}
-			mDataListSQL.deleteData(d.getTimestamp());
-		}
-		return true;
-	}
-	
 	/**
 	 * Abstract class that gets an instance of AmazonSimpleDBClient. This
 	 * is called every time an intent is received.
@@ -123,10 +66,8 @@ public abstract class PushService extends IntentService {
 	 */
 	private void pushError() {
 		if (handleError()) {
-			AmazonSimpleDBClient client = getSimpleDBClient(domainPrefix);
-			pushCalls(client);
-			pushMobileData(client);
-			pushWifiData(client);
+			AmazonSimpleDBClient client = getSimpleDBClient(mDomainPrefix);
+			PushData.pushData(client, mDomainPrefix, this);
 		}
 	}
 	
@@ -143,7 +84,9 @@ public abstract class PushService extends IntentService {
 	 * receiver or else it may not be running. This may cause the local cache to fill up.
 	 * @param context Current context.
 	 * @param isOn Value to be set for alarm.
-	 * @param pollInterval How often PendingIntents should be sent.
+	 * @param pollInterval How often PendingIntents should be sent in milliseconds. Recommended
+	 * interval is 1 hour (3600000 milliseconds). Polling significantly more frequently could
+	 * have a strongly negative impact on battery life.
 	 */
 	public static void setServiceAlarm(Context context, boolean isOn, int pollInterval) {
 		Log.d(TAG, "Setting SDB Alarm");
